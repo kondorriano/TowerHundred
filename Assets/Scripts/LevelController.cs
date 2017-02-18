@@ -23,7 +23,7 @@ public class LevelController : MonoBehaviour
             {
                 switch (map.columns[x].rows[y]) {
                     case CollisionMap.CollisionTile.Full:
-                        InstantiateOn(x + map.origin.x, map.origin.y + map.height - y - 1f, WallPrefab);
+                        InstantiateOn(x + map.origin.x, map.origin.y + y, WallPrefab);
                         break;
                     default:
                         break;

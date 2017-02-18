@@ -6,73 +6,33 @@ public class LevelController : MonoBehaviour
 {
     public GameObject WallPrefab;
 
-
-    class LevelData
-    {
-        public Vector2 size;
-        public string layout;
-        
-        public LevelData(Vector2 ls, string ll)
-        {
-            size = ls;
-            layout = ll.Replace("\n", "");
-        }
-    }
-
-    LevelData[] levels =
-    {
-        new LevelData(new Vector2(20,20), testLevel)
-    };
-
-    static string testLevel = @"
-W W W W W W W W W W W W W W W W W W W W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W                                     W 
-W W W W W W W W W W W W W W W W W W W W ";
+    public CollisionMap map;
+    [Header("Gizmos")]
+    public Color gizmoColor = Color.black;
+    
 	// Use this for initialization
 	void Start () {
-        LoadLevel(levels[0]);
+        LoadLevel();
 	}
 
-    void LoadLevel(LevelData level)
+    public void LoadLevel()
     {
-        for(int x = 0; x < level.size.x; ++x)
+        for(int x = 0; x < map.width; ++x)
         {
-            for (int y = 0; y < level.size.y; ++y)
+            for (int y = 0; y < map.height; ++y)
             {
-                char tile0 = level.layout[y * (int)level.size.x * 2 + x * 2];
-                switch(tile0)
-                {
-                    case 'W': //GUOL
-                        InstantiateOn(x, (int)level.size.y-y-1, WallPrefab);
+                switch (map.columns[x].rows[y]) {
+                    case CollisionMap.CollisionTile.Full:
+                        InstantiateOn(x + map.origin.x, map.origin.y + map.height - y - 1f, WallPrefab);
                         break;
                     default:
                         break;
-
-                };
-                //char tile1 = level.layout[y * (int)level.size.x * 2 + x * 2 + 1];
-
+                }
             }
         }
     }
 
-    GameObject InstantiateOn(int x, int y, GameObject toInstantiate)
+    GameObject InstantiateOn(float x, float y, GameObject toInstantiate)
     {
         GameObject obj = Instantiate(toInstantiate);
         obj.transform.SetParent(transform, false);
@@ -81,4 +41,28 @@ W W W W W W W W W W W W W W W W W W W W ";
         return obj;
     }
 
+    void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying) {
+            Gizmos.color = gizmoColor;
+
+            if (map != null && map.columns != null)
+            {
+                for (int x = 0; x < map.width; ++x)
+                {
+                    for (int y = 0; y < map.height; ++y)
+                    {
+                        switch (map.columns[x].rows[y])
+                        {
+                            case CollisionMap.CollisionTile.Full:
+                                Gizmos.DrawCube(new Vector3(x + map.origin.x, map.origin.y + y, 0), Vector3.one);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

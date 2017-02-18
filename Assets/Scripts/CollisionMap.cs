@@ -35,4 +35,14 @@ public class CollisionMap : ScriptableObject {
             else return 0;
         }
     }
+
+    public Vector2i TransformPosition(Vector3 pos)
+    {
+        return new Vector2i(Mathf.RoundToInt(pos.x - origin.x), Mathf.RoundToInt(pos.y - origin.y));
+    }
+
+    public Vector3 InverseTransformPosition(Vector2i pos)
+    {
+        return new Vector3(pos.x + origin.x, pos.y + origin.y, 0); ;
+    }
 }

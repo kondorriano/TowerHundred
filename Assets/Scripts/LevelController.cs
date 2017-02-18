@@ -12,10 +12,10 @@ public class LevelController : MonoBehaviour
     
 	// Use this for initialization
 	void Start () {
-        LoadLevel();
+
 	}
 
-    public void LoadLevel()
+    public void InstantiateVisualColliders()
     {
         for(int x = 0; x < map.width; ++x)
         {

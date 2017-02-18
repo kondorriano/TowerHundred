@@ -8,10 +8,10 @@ public class LevelControllerInspector : Editor
     {
         DrawDefaultInspector();
 
-        if (GUILayout.Button("Generate level now")) {
-            LevelController lc = (LevelController)target;
+        if (GUILayout.Button("Nothing")) {
+            //LevelController lc = (LevelController)target;
 
-            lc.LoadLevel();
+            //lc.InstantiateVisualColliders();
         }
     }
 }
